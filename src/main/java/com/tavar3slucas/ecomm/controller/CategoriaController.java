@@ -34,13 +34,6 @@ public class CategoriaController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> listar (@PathVariable("id") Integer id){
         Categoria categoria = categoriaService.find(id);
-        Categoria cat1 = new Categoria(1,"Informática");
-        Categoria cat2 = new Categoria(2,"Escritório");
-        List<Categoria> lista = new ArrayList<>();
-        lista.add(cat1);
-        lista.add(cat2);
         return ResponseEntity.ok().body(categoria) ;
     }
-
-
 }
