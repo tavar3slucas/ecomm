@@ -2,10 +2,15 @@ package com.tavar3slucas.ecomm;
 
 import com.tavar3slucas.ecomm.domain.Categoria;
 import com.tavar3slucas.ecomm.domain.Cidade;
+import com.tavar3slucas.ecomm.domain.Cliente;
+import com.tavar3slucas.ecomm.domain.Endereco;
 import com.tavar3slucas.ecomm.domain.Estado;
 import com.tavar3slucas.ecomm.domain.Produto;
+import com.tavar3slucas.ecomm.enums.TipoCliente;
 import com.tavar3slucas.ecomm.repository.CategoriaRepository;
 import com.tavar3slucas.ecomm.repository.CidadeRepository;
+import com.tavar3slucas.ecomm.repository.ClienteRepository;
+import com.tavar3slucas.ecomm.repository.EnderecoRepository;
 import com.tavar3slucas.ecomm.repository.EstadoRepository;
 import com.tavar3slucas.ecomm.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,12 @@ public class EcommApplication implements CommandLineRunner {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(EcommApplication.class, args);
 	}
@@ -52,14 +63,26 @@ public class EcommApplication implements CommandLineRunner {
 
 		Estado est1 = new Estado(null,"Minas Gerais");
 		Estado est2 = new Estado(null,"São Paulo");
-		Cidade c1 = new Cidade(null,"Uberlândia",est1);
-		Cidade c2 = new Cidade(null,"São Paulo",est2);
-		Cidade c3 = new Cidade(null,"Campinas",est2);
+		Cidade cidade1 = new Cidade(null,"Uberlândia",est1);
+		Cidade cidade2 = new Cidade(null,"São Paulo",est2);
+		Cidade cidade3 = new Cidade(null,"Campinas",est2);
 
-		est1.getCidades().addAll(Arrays.asList(c1));
-		est2.getCidades().addAll(Arrays.asList(c2,c3));
+		est1.getCidades().addAll(Arrays.asList(cidade1));
+		est2.getCidades().addAll(Arrays.asList(cidade2,cidade3));
 
 		estadoRepository.saveAll(Arrays.asList(est1,est2));
-		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
+		cidadeRepository.saveAll(Arrays.asList(cidade1,cidade2,cidade3));
+
+		Cliente cliente1 = new Cliente(null, "Maria Silva", "mariasilva@gmail", "17758022804", TipoCliente.PESSOAFISICA);
+		cliente1.getTelefones().addAll(Arrays.asList("27363323" , "93838393"));
+
+		Endereco endereco1 = new Endereco(null,"Ruas Flores", "300", "Apto 303", "Jardim", "38220834", cliente1,cidade1);
+		Endereco endereco2 = new Endereco(null,"Avenida Matos", "105", "Sala 800", "Centro", "38777012", cliente1,cidade2);
+
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1,endereco2));
+
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		enderecoRepository.saveAll(Arrays.asList(endereco1,endereco2));
+
 	}
 }
