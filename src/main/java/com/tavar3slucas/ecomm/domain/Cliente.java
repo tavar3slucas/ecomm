@@ -1,5 +1,6 @@
 package com.tavar3slucas.ecomm.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tavar3slucas.ecomm.enums.TipoCliente;
 
 import javax.persistence.CollectionTable;
@@ -29,6 +30,7 @@ public class Cliente implements Serializable {
     private String cpfOuCnpj;
     private Integer tipo;
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
