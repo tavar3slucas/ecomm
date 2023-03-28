@@ -1,5 +1,7 @@
 package com.tavar3slucas.ecomm.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.CascadeType;
@@ -9,10 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 public class Pedido implements Serializable {
 
@@ -20,11 +26,13 @@ public class Pedido implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @JsonFormat(pattern = "dd/MM/yyy HH:mm")
     private Date instante;
 
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
-
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name="client_id")
     private Cliente cliente;
@@ -32,6 +40,9 @@ public class Pedido implements Serializable {
     @ManyToOne
     @JoinColumn(name="endero_de_entrega_id")
     private Endereco endecodeEntrega;
+
+    @OneToMany(mappedBy = "id.pedido")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido(){}
 
@@ -93,5 +104,13 @@ public class Pedido implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
     }
 }

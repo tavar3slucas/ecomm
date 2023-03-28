@@ -1,5 +1,6 @@
 package com.tavar3slucas.ecomm.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tavar3slucas.ecomm.enums.TipoCliente;
 
@@ -29,6 +30,7 @@ public class Cliente implements Serializable {
     private String email;
     private String cpfOuCnpj;
     private Integer tipo;
+
     @OneToMany(mappedBy = "cliente")
     @JsonManagedReference
     private List<Endereco> enderecos = new ArrayList<>();
@@ -36,6 +38,7 @@ public class Cliente implements Serializable {
     @ElementCollection
     @CollectionTable(name="TELEFONE")
     private Set<String> telefones = new HashSet<>();
+    @JsonBackReference
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 

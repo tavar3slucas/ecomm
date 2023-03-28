@@ -1,5 +1,6 @@
 package com.tavar3slucas.ecomm.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tavar3slucas.ecomm.enums.EstadoPagamento;
 
 import javax.persistence.Entity;
@@ -9,8 +10,9 @@ import java.util.Date;
 public class PagamentoComBoleto extends Pagamento{
 
     private static final long serialVersionUID = 1l;
-
+    @JsonFormat(pattern = "dd/MM/yyy")
     private Date dataVencimento;
+    @JsonFormat(pattern = "dd/MM/yyy")
     private Date dataPagamento;
 
 

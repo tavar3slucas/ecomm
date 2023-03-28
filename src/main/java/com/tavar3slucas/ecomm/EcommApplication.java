@@ -5,6 +5,7 @@ import com.tavar3slucas.ecomm.domain.Cidade;
 import com.tavar3slucas.ecomm.domain.Cliente;
 import com.tavar3slucas.ecomm.domain.Endereco;
 import com.tavar3slucas.ecomm.domain.Estado;
+import com.tavar3slucas.ecomm.domain.ItemPedido;
 import com.tavar3slucas.ecomm.domain.Pagamento;
 import com.tavar3slucas.ecomm.domain.PagamentoComBoleto;
 import com.tavar3slucas.ecomm.domain.PagamentoComCartao;
@@ -17,6 +18,7 @@ import com.tavar3slucas.ecomm.repository.CidadeRepository;
 import com.tavar3slucas.ecomm.repository.ClienteRepository;
 import com.tavar3slucas.ecomm.repository.EnderecoRepository;
 import com.tavar3slucas.ecomm.repository.EstadoRepository;
+import com.tavar3slucas.ecomm.repository.ItemPedidoRepository;
 import com.tavar3slucas.ecomm.repository.PagamentoRepository;
 import com.tavar3slucas.ecomm.repository.PedidoRepository;
 import com.tavar3slucas.ecomm.repository.ProdutoRepository;
@@ -54,6 +56,9 @@ public class EcommApplication implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommApplication.class, args);
@@ -110,5 +115,19 @@ public class EcommApplication implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(pedido1,pedido2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1,pagto2));
+
+		ItemPedido ip1 = new ItemPedido(pedido1,p1,0.00, 1, 2000.0);
+		ItemPedido ip2 = new ItemPedido(pedido1,p3,0.00, 2, 80.0);
+		ItemPedido ip3 = new ItemPedido(pedido2,p2,100.00, 1, 800.0);
+
+		pedido1.getItens().addAll(Arrays.asList(ip1,ip3));
+		pedido2.getItens().addAll(Arrays.asList(ip2));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip2));
+		p3.getItens().addAll(Arrays.asList(ip3));
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
+
 	}
 }

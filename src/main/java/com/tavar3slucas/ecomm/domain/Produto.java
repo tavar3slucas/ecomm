@@ -1,6 +1,7 @@
 package com.tavar3slucas.ecomm.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -10,10 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Produto implements Serializable {
@@ -24,6 +28,10 @@ public class Produto implements Serializable {
     private Integer id;
     private String nome;
     private double preco;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany
@@ -40,6 +48,14 @@ public class Produto implements Serializable {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    @JsonIgnore
+    public List<Pedido> getPedidos(){
+        List<Pedido> lista = new ArrayList<>();
+        for (ItemPedido x : itens){
+            lista.add(x.getPedido());
+        } return lista;
     }
 
     public Integer getId() {
@@ -85,5 +101,13 @@ public class Produto implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
     }
 }
