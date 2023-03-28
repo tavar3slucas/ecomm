@@ -5,19 +5,27 @@ import com.tavar3slucas.ecomm.domain.Cidade;
 import com.tavar3slucas.ecomm.domain.Cliente;
 import com.tavar3slucas.ecomm.domain.Endereco;
 import com.tavar3slucas.ecomm.domain.Estado;
+import com.tavar3slucas.ecomm.domain.Pagamento;
+import com.tavar3slucas.ecomm.domain.PagamentoComBoleto;
+import com.tavar3slucas.ecomm.domain.PagamentoComCartao;
+import com.tavar3slucas.ecomm.domain.Pedido;
 import com.tavar3slucas.ecomm.domain.Produto;
+import com.tavar3slucas.ecomm.enums.EstadoPagamento;
 import com.tavar3slucas.ecomm.enums.TipoCliente;
 import com.tavar3slucas.ecomm.repository.CategoriaRepository;
 import com.tavar3slucas.ecomm.repository.CidadeRepository;
 import com.tavar3slucas.ecomm.repository.ClienteRepository;
 import com.tavar3slucas.ecomm.repository.EnderecoRepository;
 import com.tavar3slucas.ecomm.repository.EstadoRepository;
+import com.tavar3slucas.ecomm.repository.PagamentoRepository;
+import com.tavar3slucas.ecomm.repository.PedidoRepository;
 import com.tavar3slucas.ecomm.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -40,6 +48,12 @@ public class EcommApplication implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommApplication.class, args);
@@ -84,5 +98,17 @@ public class EcommApplication implements CommandLineRunner {
 		clienteRepository.saveAll(Arrays.asList(cliente1));
 		enderecoRepository.saveAll(Arrays.asList(endereco1,endereco2));
 
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido pedido1 = new Pedido(null,sdf.parse("18/12/2022 11:30"),cliente1,endereco1);
+		Pedido pedido2 = new Pedido(null,sdf.parse("10/10/2022 19:30"),cliente1,endereco2);
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO,pedido1,6);
+		pedido1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null,EstadoPagamento.PENDENTE,pedido2,sdf.parse("20/10/2022 00:00"),
+				null);
+		pedido2.setPagamento(pagto2);
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1,pedido2));
+
+		pedidoRepository.saveAll(Arrays.asList(pedido1,pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1,pagto2));
 	}
 }
