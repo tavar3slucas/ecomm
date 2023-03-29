@@ -1,6 +1,7 @@
 package com.tavar3slucas.ecomm.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tavar3slucas.ecomm.enums.TipoCliente;
 
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class Endereco implements Serializable {
     private String complemento;
     private String bairro;
     private String cep;
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;

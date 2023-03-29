@@ -1,6 +1,6 @@
 package com.tavar3slucas.ecomm.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tavar3slucas.ecomm.enums.EstadoPagamento;
 
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ public abstract class Pagamento implements Serializable {
     private Integer id;
     private Integer estado;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId

@@ -1,8 +1,7 @@
 package com.tavar3slucas.ecomm.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,10 +28,10 @@ public class Pedido implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyy HH:mm")
     private Date instante;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
-    @JsonManagedReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="client_id")
     private Cliente cliente;
