@@ -1,5 +1,6 @@
 package com.tavar3slucas.ecomm.controller;
 
+import com.tavar3slucas.ecomm.controller.DTO.CategoriaDTO;
 import com.tavar3slucas.ecomm.domain.Categoria;
 import com.tavar3slucas.ecomm.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "categorias")
@@ -26,15 +28,12 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @GetMapping
-    public List<Categoria> listar (){
-        Categoria cat1 = new Categoria(1,"Informática");
-        Categoria cat2 = new Categoria(2,"Escritório");
-        List<Categoria> lista = new ArrayList<>();
-        lista.add(cat1);
-        lista.add(cat2);
-
-        return lista;
+    @GetMapping()
+    public ResponseEntity<List<CategoriaDTO>> findAll (){
+        List<Categoria> categoriaList = categoriaService.findAll();
+        List<CategoriaDTO> listDto = categoriaList.stream().map(obj ->
+                new CategoriaDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto) ;
     }
 
     @GetMapping(value = "/{id}")
